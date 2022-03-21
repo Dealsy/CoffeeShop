@@ -1,19 +1,35 @@
-import type { NextPage } from "next";
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import Banner from "../components/banner";
 import Card from "../components/card";
 import coffeeStores from "../data/coffee-stores.json";
 
-export async function getStaticProps(context: any) {
+export async function getStaticProps(context) {
+  const options = {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      Authorization: process.env.NEXT_PUBLIC_FOURSQUARE_API_KEY,
+    },
+  };
+
+  const response = await fetch(
+    "https://api.foursquare.com/v3/places/nearby?ll=-37.6690789%2C144.4061541&query=coffee%20stores&limit=10",
+    options
+  );
+  const data = await response.json();
+  console.log("data", data.results);
+
   return {
-    props: { coffeeStores },
+    props: {
+      coffeeStores: data.results,
+    },
   };
 }
 
 console.log(coffeeStores);
 
-const Home: NextPage = (props: any) => {
+const Home = (props) => {
   console.log("props", props);
   const handleOnBannerBtnClick = () => {
     console.log("hi");
@@ -35,13 +51,16 @@ const Home: NextPage = (props: any) => {
           <>
             <h2 className={styles.heading2}>Stores!</h2>
             <div className={styles.cardLayout}>
-              {props.coffeeStores.map((coffeeStore: any) => {
+              {props.coffeeStores.map((coffeeStore) => {
                 return (
                   <Card
-                    key={coffeeStore.id}
+                    key={coffeeStore.fsq_id}
                     href={`/coffee-store/${coffeeStore.id}`}
                     name={coffeeStore.name}
-                    imgUrl={coffeeStore.imgUrl}
+                    imgUrl={
+                      coffeeStore.omgUrl ||
+                      "https://images.unsplash.com/photo-1498804103079-a6351b050096?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2468&q=80"
+                    }
                     className={styles.card}
                   />
                 );
