@@ -3,13 +3,13 @@ import Link from "next/link";
 import styles from "../styles/Card.module.css";
 import cls from "classnames";
 
-interface Props {
+interface CardProps {
   name: string;
   imgUrl: string;
   href: string;
   className: string;
 }
-export default function Card(props: Props) {
+export default function Card(props: CardProps) {
   return (
     <Link href={props.href}>
       <a className={styles.cardLink}>
@@ -23,7 +23,7 @@ export default function Card(props: Props) {
               src={props.imgUrl}
               alt="card"
               width={260}
-              height={160}
+              height={280}
             />
           </div>
         </div>

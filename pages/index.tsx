@@ -3,8 +3,18 @@ import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import Banner from "../components/banner";
 import Card from "../components/card";
+import coffeeStores from "../data/coffee-stores.json";
 
-const Home: NextPage = () => {
+export async function getStaticProps(context: any) {
+  return {
+    props: { coffeeStores },
+  };
+}
+
+console.log(coffeeStores);
+
+const Home: NextPage = (props: any) => {
+  console.log("props", props);
   const handleOnBannerBtnClick = () => {
     console.log("hi");
   };
@@ -21,20 +31,25 @@ const Home: NextPage = () => {
           buttonText="View local Coffee Shops"
           handleOnClick={handleOnBannerBtnClick}
         />
-        <div className={styles.cardLayout}>
-          <Card
-            href="/coffee-store/1"
-            name="card"
-            imgUrl={"/static/mesh-gradient.png"}
-            className={styles.card}
-          />
-          <Card
-            href="/coffee-store/1"
-            name="card"
-            imgUrl={"/static/mesh-gradient.png"}
-            className={styles.card}
-          />
-        </div>
+        {coffeeStores.length > 0 && (
+          <>
+            <h2 className={styles.heading2}>Stores!</h2>
+            <div className={styles.cardLayout}>
+              {props.coffeeStores.map((coffeeStore: any) => {
+                return (
+                  <Card
+                    key={coffeeStore.id}
+                    href={`/coffee-store/${coffeeStore.id}`}
+                    name={coffeeStore.name}
+                    imgUrl={coffeeStore.imgUrl}
+                    className={styles.card}
+                  />
+                );
+              })}
+              ;
+            </div>
+          </>
+        )}
       </main>
     </div>
   );
