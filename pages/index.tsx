@@ -2,6 +2,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import Banner from "../components/banner";
+import Card from "../components/card";
 
 const Home: NextPage = () => {
   const handleOnBannerBtnClick = () => {
@@ -20,6 +21,20 @@ const Home: NextPage = () => {
           buttonText="View local Coffee Shops"
           handleOnClick={handleOnBannerBtnClick}
         />
+        <div className={styles.cardLayout}>
+          <Card
+            href="/coffee-store/1"
+            name="card"
+            imgUrl={"/static/mesh-gradient.png"}
+            className={styles.card}
+          />
+          <Card
+            href="/coffee-store/1"
+            name="card"
+            imgUrl={"/static/mesh-gradient.png"}
+            className={styles.card}
+          />
+        </div>
       </main>
     </div>
   );
