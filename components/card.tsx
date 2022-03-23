@@ -23,7 +23,7 @@ export default function Card(props: CardProps) {
               src={props.imgUrl}
               alt="card"
               width={260}
-              height={280}
+              height={180}
             />
           </div>
         </div>

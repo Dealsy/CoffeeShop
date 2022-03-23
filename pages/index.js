@@ -2,27 +2,15 @@ import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import Banner from "../components/banner";
 import Card from "../components/card";
-import coffeeStores from "../data/coffee-stores.json";
+import { fetchCoffeeStores } from "../lib/coffee-stores";
+import useTrackLocation from "../hooks/use-track-location";
+
+const coffeeStores = await fetchCoffeeStores();
 
 export async function getStaticProps(context) {
-  const options = {
-    method: "GET",
-    headers: {
-      Accept: "application/json",
-      Authorization: process.env.NEXT_PUBLIC_FOURSQUARE_API_KEY,
-    },
-  };
-
-  const response = await fetch(
-    "https://api.foursquare.com/v3/places/nearby?ll=-37.6690789%2C144.4061541&query=coffee%20stores&limit=10",
-    options
-  );
-  const data = await response.json();
-  console.log("data", data.results);
-
   return {
     props: {
-      coffeeStores: data.results,
+      coffeeStores,
     },
   };
 }
@@ -31,8 +19,14 @@ console.log(coffeeStores);
 
 const Home = (props) => {
   console.log("props", props);
+
+  const { handleTrackLocation, latLong, LocationErrorMsg } = useTrackLocation();
+
+  console.log("latLong", latLong);
+  console.log({ LocationErrorMsg });
   const handleOnBannerBtnClick = () => {
     console.log("hi");
+    handleTrackLocation();
   };
   return (
     <div className={styles.container}>
@@ -49,16 +43,16 @@ const Home = (props) => {
         />
         {coffeeStores.length > 0 && (
           <>
-            <h2 className={styles.heading2}>Stores!</h2>
+            <h2 className={styles.heading2}>Melbourne</h2>
             <div className={styles.cardLayout}>
               {props.coffeeStores.map((coffeeStore) => {
                 return (
                   <Card
                     key={coffeeStore.fsq_id}
-                    href={`/coffee-store/${coffeeStore.id}`}
+                    href={`/coffee-store/${coffeeStore.fsq_id}`}
                     name={coffeeStore.name}
                     imgUrl={
-                      coffeeStore.omgUrl ||
+                      coffeeStore.imgUrl ||
                       "https://images.unsplash.com/photo-1498804103079-a6351b050096?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2468&q=80"
                     }
                     className={styles.card}

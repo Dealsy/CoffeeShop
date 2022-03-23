@@ -1,18 +1,23 @@
 import { useRouter } from "next/router";
 import Link from "next/link";
-import coffeStoresData from "../../data/coffee-stores.json";
 import Head from "next/head";
 import styles from "../../styles/coffee-store.module.css";
 import Image from "next/image";
+import { fetchCoffeeStores } from "../../lib/coffee-stores";
+
 import cls from "classnames";
 
 // getStaticProps is server side rendering content
-export function getStaticProps(staticProps) {
+export async function getStaticProps(staticProps) {
+  const coffeeStores = await fetchCoffeeStores();
   const params = staticProps.params;
+
+  console.log("paramas", params);
+
   return {
     props: {
-      coffeStore: coffeStoresData.find((coffeStore) => {
-        return coffeStore.id.toString() === params.id;
+      coffeStore: coffeeStores.find((coffeStore) => {
+        return coffeStore.fsq_id.toString() === params.id;
       }),
     },
   };
@@ -21,11 +26,12 @@ export function getStaticProps(staticProps) {
 // Preloads paths listed in getStatic Paths
 // Fallback False will render any page not in paths as a 404
 // Fallback True will try to render any page, but this will not be pre-loaded ( if the route does not exsit it will throw an error by default )
-export function getStaticPaths() {
-  const paths = coffeStoresData.map((coffeStore) => {
+export async function getStaticPaths() {
+  const coffeeStores = await fetchCoffeeStores();
+  const paths = coffeeStores.map((coffeStore) => {
     return {
       params: {
-        id: coffeStore.id.toString(),
+        id: coffeStore.fsq_id.toString(),
       },
     };
   });
@@ -42,7 +48,7 @@ export default function CoffeStore(props) {
   if (router.isFallback) {
     return <div>Loading...</div>;
   }
-  const { address, name, neighbourhood, imgUrl } = props.coffeStore;
+  const { location, name, neighborhood, imgUrl } = props.coffeStore;
 
   const handleUpvoteButton = () => {
     console.log(handleUpvoteButton);
@@ -66,7 +72,10 @@ export default function CoffeStore(props) {
           </div>
 
           <Image
-            src={imgUrl}
+            src={
+              imgUrl ||
+              "https://images.unsplash.com/photo-1498804103079-a6351b050096?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2468&q=80"
+            }
             width={600}
             height={560}
             className={styles.storeImg}
@@ -82,7 +91,7 @@ export default function CoffeStore(props) {
               height="24"
               alt="icon"
             />
-            <p className={styles.text}>{address}</p>
+            <p className={styles.text}>{location.address}</p>
           </div>
           <div className={styles.iconWrapper}>
             <Image
@@ -91,7 +100,8 @@ export default function CoffeStore(props) {
               height="24"
               alt="icon"
             />
-            <p className={styles.text}>{neighbourhood}</p>
+            <p className={styles.text}>{location.locality}</p>
+            <p className={styles.text}>{location.postcode}</p>
           </div>
           <div className={styles.iconWrapper}>
             <Image
