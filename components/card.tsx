@@ -11,7 +11,7 @@ interface CardProps {
 }
 export default function Card(props: CardProps) {
   return (
-    <Link href={props.href}>
+    <Link passHref href={props.href}>
       <a className={styles.cardLink}>
         <div className={cls("glass", styles.container)}>
           <div className={styles.cardHeaderWrapper}>

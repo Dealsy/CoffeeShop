@@ -1,8 +1,31 @@
-import '../styles/globals.css'
-import type { AppProps } from 'next/app'
+import "../styles/globals.css";
+import type { AppProps } from "next/app";
+import { Children, createContext } from "react";
 
-function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+interface ContextProps {
+  children: any;
 }
 
-export default MyApp
+// @ts-ignore
+const StoreContext = createContext();
+const initialState = {
+  latlong: "",
+  coffeeStores: [],
+};
+function StoreProvider(props: ContextProps) {
+  return (
+    <StoreContext.Provider value={{ state: initialState }}>
+      {props.children}
+    </StoreContext.Provider>
+  );
+}
+
+function MyApp({ Component, pageProps }: AppProps) {
+  return (
+    <StoreProvider>
+      <Component {...pageProps} />{" "}
+    </StoreProvider>
+  );
+}
+
+export default MyApp;

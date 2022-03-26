@@ -14,11 +14,13 @@ export async function getStaticProps(staticProps) {
 
   console.log("paramas", params);
 
+  const findCoffeeStoreById = coffeeStores.find((coffeStore) => {
+    return coffeStore.fsq_id.toString() === params.id; // Dynamin ID
+  });
+
   return {
     props: {
-      coffeStore: coffeeStores.find((coffeStore) => {
-        return coffeStore.fsq_id.toString() === params.id;
-      }),
+      coffeStore: findCoffeeStoreById ? findCoffeeStoreById : {},
     },
   };
 }
