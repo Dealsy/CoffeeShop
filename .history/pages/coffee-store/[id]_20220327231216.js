@@ -8,7 +8,6 @@ import { fetchCoffeeStores } from "../../lib/coffee-stores";
 import cls from "classnames";
 import { useContext, useEffect, useState } from "react";
 import { StoreContext } from "../_app";
-import { isEmpty } from "../../utils";
 
 // getStaticProps is server side rendering content
 export async function getStaticProps(staticProps) {
@@ -67,9 +66,9 @@ const CoffeStore = (initialProps) => {
         setCoffeeStore(findCoffeeStoreById);
       }
     }
-  }, [id]);
+  });
 
-  const { location, name, neighborhood, imgUrl } = coffeeStore;
+  const { location, name, neighborhood, imgUrl } = coffeStore;
 
   if (router.isFallback) {
     return <div>Loading...</div>;

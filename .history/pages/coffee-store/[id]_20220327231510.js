@@ -69,7 +69,7 @@ const CoffeStore = (initialProps) => {
     }
   }, [id]);
 
-  const { location, name, neighborhood, imgUrl } = coffeeStore;
+  const { location, name, neighborhood, imgUrl } = coffeStore;
 
   if (router.isFallback) {
     return <div>Loading...</div>;

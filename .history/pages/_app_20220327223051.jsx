@@ -1,31 +1,31 @@
 import "../styles/globals.css";
-import type { AppProps } from "next/app";
+// import type { AppProps } from "next/app";
 import { Children, createContext, useReducer } from "react";
 
-interface ContextProps {
-  children: any;
-}
+// interface ContextProps {
+//   children: any;
+// }
 
 // @ts-ignore
-export const StoreContext = createContext();
+const StoreContext = createContext();
 
 export const ACTION_TYPES = {
   SET_LAT_LONG: "SET_LAT_LONG",
   SET_COFFEE_STORES: "SET_COFFEE_STORES",
 };
 
-const storeReducer = (state: any, action: any) => {
+const storeReducer = (state, action) => {
   switch (action.type) {
     case ACTION_TYPES.SET_LAT_LONG: {
       return {
         ...state,
-        latLong: action.payload.latLong,
+        latlong: action.payload.latlong,
       };
     }
     case ACTION_TYPES.SET_COFFEE_STORES: {
       return {
         ...state,
-        coffeeStores: action.payload.coffeeStores,
+        coffeeStores: action.payload.latlong,
       };
     }
     default:
@@ -33,7 +33,7 @@ const storeReducer = (state: any, action: any) => {
   }
 };
 
-function StoreProvider(props: ContextProps) {
+function StoreProvider(children) {
   const initialState = {
     latlong: "",
     coffeeStores: [],
@@ -43,13 +43,13 @@ function StoreProvider(props: ContextProps) {
   const [state, dispatch] = useReducer(storeReducer, initialState);
 
   return (
-    <StoreContext.Provider value={{ state, dispatch }}>
+    <StoreContext.Provider value={{ state, dispatch, children }}>
       {props.children}
     </StoreContext.Provider>
   );
 }
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps }) {
   return (
     <StoreProvider>
       <Component {...pageProps} />{" "}

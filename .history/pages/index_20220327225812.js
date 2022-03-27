@@ -96,7 +96,7 @@ const Home = (props) => {
         )}
         {coffeeStoresError && (
           <h2 style={{ color: "#dfd222" }}>
-            Cannot locate any coffeee stores near you!
+            Couldnt locate any coffeee stores near you!
           </h2>
         )}
         {coffeeStores.length > 0 && (

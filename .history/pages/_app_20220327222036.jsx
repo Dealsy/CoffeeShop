@@ -7,7 +7,7 @@ interface ContextProps {
 }
 
 // @ts-ignore
-export const StoreContext = createContext();
+const StoreContext = createContext();
 
 export const ACTION_TYPES = {
   SET_LAT_LONG: "SET_LAT_LONG",
@@ -19,13 +19,13 @@ const storeReducer = (state: any, action: any) => {
     case ACTION_TYPES.SET_LAT_LONG: {
       return {
         ...state,
-        latLong: action.payload.latLong,
+        latlong: action.payload.latlong,
       };
     }
     case ACTION_TYPES.SET_COFFEE_STORES: {
       return {
         ...state,
-        coffeeStores: action.payload.coffeeStores,
+        coffeeStores: action.payload.latlong,
       };
     }
     default:

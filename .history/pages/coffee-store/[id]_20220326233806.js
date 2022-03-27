@@ -6,9 +6,6 @@ import Image from "next/image";
 import { fetchCoffeeStores } from "../../lib/coffee-stores";
 
 import cls from "classnames";
-import { useContext, useEffect, useState } from "react";
-import { StoreContext } from "../_app";
-import { isEmpty } from "../../utils";
 
 // getStaticProps is server side rendering content
 export async function getStaticProps(staticProps) {
@@ -46,34 +43,14 @@ export async function getStaticPaths() {
   };
 }
 
-const CoffeStore = (initialProps) => {
+export default function CoffeStore(props) {
   const router = useRouter();
   console.log("router", router);
-
-  const id = router.query.id;
-
-  const [coffeeStore, setCoffeeStore] = useState(initialProps.CoffeStore);
-
-  const {
-    state: { coffeeStores },
-  } = useContext(StoreContext);
-
-  useEffect(() => {
-    if (isEmpty(initialProps.coffeeStore)) {
-      if (coffeeStore.length > 0) {
-        const findCoffeeStoreById = coffeeStores.find((coffeStore) => {
-          return coffeStore.fsq_id.toString() === id; // Dynamin ID
-        });
-        setCoffeeStore(findCoffeeStoreById);
-      }
-    }
-  }, [id]);
-
-  const { location, name, neighborhood, imgUrl } = coffeeStore;
 
   if (router.isFallback) {
     return <div>Loading...</div>;
   }
+  const { location, name, neighborhood, imgUrl } = props.coffeStore;
 
   const handleUpvoteButton = () => {
     console.log(handleUpvoteButton);
@@ -145,6 +122,4 @@ const CoffeStore = (initialProps) => {
       </div>
     </div>
   );
-};
-
-export default CoffeStore;
+}

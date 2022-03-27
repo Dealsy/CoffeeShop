@@ -44,13 +44,13 @@ const Home = (props) => {
       if (latLong) {
         try {
           const fetchedCoffeeStores = await fetchCoffeeStores(latLong);
-          // setCoffeeStores(fetchedCoffeeStores);
+          setCoffeeStores(fetchedCoffeeStores);
 
           console.log("effect Stores", fetchedCoffeeStores);
           dispatch({
             type: ACTION_TYPES.SET_COFFEE_STORES,
             payload: {
-              coffeeStores: fetchedCoffeeStores,
+              coffeeStores: fetchCoffeeStores,
             },
           });
         } catch (error) {
@@ -96,7 +96,7 @@ const Home = (props) => {
         )}
         {coffeeStoresError && (
           <h2 style={{ color: "#dfd222" }}>
-            Cannot locate any coffeee stores near you!
+            Couldn't locate any coffeee stores near you!
           </h2>
         )}
         {coffeeStores.length > 0 && (

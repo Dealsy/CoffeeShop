@@ -6,9 +6,8 @@ import Image from "next/image";
 import { fetchCoffeeStores } from "../../lib/coffee-stores";
 
 import cls from "classnames";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { StoreContext } from "../_app";
-import { isEmpty } from "../../utils";
 
 // getStaticProps is server side rendering content
 export async function getStaticProps(staticProps) {
@@ -51,25 +50,11 @@ const CoffeStore = (initialProps) => {
   console.log("router", router);
 
   const id = router.query.id;
-
   const [coffeeStore, setCoffeeStore] = useState(initialProps.CoffeStore);
-
   const {
     state: { coffeeStores },
   } = useContext(StoreContext);
-
-  useEffect(() => {
-    if (isEmpty(initialProps.coffeeStore)) {
-      if (coffeeStore.length > 0) {
-        const findCoffeeStoreById = coffeeStores.find((coffeStore) => {
-          return coffeStore.fsq_id.toString() === id; // Dynamin ID
-        });
-        setCoffeeStore(findCoffeeStoreById);
-      }
-    }
-  }, [id]);
-
-  const { location, name, neighborhood, imgUrl } = coffeeStore;
+  const { location, name, neighborhood, imgUrl } = initialProps.coffeStore;
 
   if (router.isFallback) {
     return <div>Loading...</div>;

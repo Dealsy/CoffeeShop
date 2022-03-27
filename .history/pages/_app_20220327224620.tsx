@@ -25,7 +25,7 @@ const storeReducer = (state: any, action: any) => {
     case ACTION_TYPES.SET_COFFEE_STORES: {
       return {
         ...state,
-        coffeeStores: action.payload.coffeeStores,
+        coffeeStores: action.payload.latLong,
       };
     }
     default:

@@ -4,8 +4,7 @@ import Banner from "../components/banner";
 import Card from "../components/card";
 import { fetchCoffeeStores } from "../lib/coffee-stores";
 import useTrackLocation from "../hooks/use-track-location";
-import { useEffect, useState, useContext } from "react";
-import { ACTION_TYPES, StoreContext } from "../pages/_app";
+import { useEffect, useState } from "react";
 
 export async function getStaticProps(context) {
   const coffeeStores = await fetchCoffeeStores();
@@ -20,15 +19,11 @@ export async function getStaticProps(context) {
 const Home = (props) => {
   console.log("props", props);
 
-  const { handleTrackLocation, locationErrorMsg, isFindingLocation } =
+  const { handleTrackLocation, latLong, locationErrorMsg, isFindingLocation } =
     useTrackLocation();
 
-  // const [coffeeStores, setCoffeeStores] = useState("");
+  const [coffeeStores, setCoffeeStores] = useState("");
   const [coffeeStoresError, setcoffeeStoresError] = useState(null);
-
-  const { dispatch, state } = useContext(StoreContext);
-
-  const { coffeeStores, latLong } = state;
 
   console.log("latLong", latLong);
 
@@ -44,15 +39,9 @@ const Home = (props) => {
       if (latLong) {
         try {
           const fetchedCoffeeStores = await fetchCoffeeStores(latLong);
-          // setCoffeeStores(fetchedCoffeeStores);
+          setCoffeeStores(fetchedCoffeeStores);
 
           console.log("effect Stores", fetchedCoffeeStores);
-          dispatch({
-            type: ACTION_TYPES.SET_COFFEE_STORES,
-            payload: {
-              coffeeStores: fetchedCoffeeStores,
-            },
-          });
         } catch (error) {
           console.log(error);
           setcoffeeStoresError(error.message);
@@ -96,7 +85,7 @@ const Home = (props) => {
         )}
         {coffeeStoresError && (
           <h2 style={{ color: "#dfd222" }}>
-            Cannot locate any coffeee stores near you!
+            Couldn't locate any coffeee stores near you!
           </h2>
         )}
         {coffeeStores.length > 0 && (
